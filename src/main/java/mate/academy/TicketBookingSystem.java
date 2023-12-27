@@ -3,23 +3,18 @@ package mate.academy;
 import java.util.concurrent.Semaphore;
 
 public class TicketBookingSystem {
-    private int totalSeats;
-    private Semaphore semaphore = new Semaphore(totalSeats);
+    private Semaphore semaphore;
 
     public TicketBookingSystem(int totalSeats) {
-        this.totalSeats = totalSeats;
+        this.semaphore = new Semaphore(totalSeats);
     }
 
     public BookingResult attemptBooking(String user) {
         BookingResult result = null;
-        try {
-            semaphore.acquire();
-            result = new BookingResult(user, true, "You booked a seat!");
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            result = new BookingResult(user, false, "There isn't an available seat! Try later.");
-        } finally {
-            semaphore.release();
+        if (semaphore.tryAcquire()) {
+            result = new BookingResult(user, true, "Booking successful.");
+        } else {
+            result = new BookingResult(user, false, "No seats available.");
         }
         return result;
     }

@@ -105,10 +105,6 @@ class TicketBookingSystemTest {
 
         startLatch.countDown(); // Signal all threads to start booking
 
-        for (Thread thread : threads) {
-            thread.join();
-        }
-
         // then
         int successfulBookings = 0;
         for (BookingResult result : results) {
