@@ -19,7 +19,8 @@ public class TicketBookingSystem {
         }
         try {
             semaphore.acquire();
-            return seats.decrementAndGet() < 0 ? new BookingResult(user, false, "No seats available.")
+            return seats.decrementAndGet() < 0
+                    ? new BookingResult(user, false, "No seats available.")
                     : new BookingResult(user, true, "Booking successful.");
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
