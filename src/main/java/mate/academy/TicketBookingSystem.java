@@ -14,13 +14,13 @@ public class TicketBookingSystem {
     }
 
     public BookingResult attemptBooking(String user) {
+        if (seats.get() <= 0) {
+            return new BookingResult(user, false, "No seats available.");
+        }
         try {
             semaphore.acquire();
-            if (seats.get() <= 0) {
-                return new BookingResult(user, false, "No seats available.");
-            }
-            seats.decrementAndGet();
-            return new BookingResult(user, true, "Booking successful.");
+            return seats.decrementAndGet() < 0 ? new BookingResult(user, false, "No seats available.")
+                    : new BookingResult(user, true, "Booking successful.");
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
