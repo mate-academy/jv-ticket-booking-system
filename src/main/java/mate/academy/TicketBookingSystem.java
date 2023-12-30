@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TicketBookingSystem {
     private final Semaphore semaphore;
+
     private final AtomicInteger seats;
 
     public TicketBookingSystem(int totalSeats) {
