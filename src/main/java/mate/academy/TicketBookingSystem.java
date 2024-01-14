@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TicketBookingSystem {
     private final Semaphore semaphore;
-    private AtomicInteger counter;
+    private final AtomicInteger counter;
 
     public TicketBookingSystem(int totalSeats) {
         this.semaphore = new Semaphore(totalSeats);
@@ -13,18 +13,16 @@ public class TicketBookingSystem {
     }
 
     public BookingResult attemptBooking(String user) {
-        try {
-            semaphore.acquire();
-            if (counter.get() > 0) {
-                counter.decrementAndGet();
-                return new BookingResult(user, true, "Booking successful.");
+        if (semaphore.tryAcquire()) {
+            try {
+                if (counter.get() > 0) {
+                    counter.decrementAndGet();
+                    return new BookingResult(user, true, "Booking successful.");
+                }
+            } finally {
+                semaphore.release();
             }
-            return new BookingResult(user, false, "No seats available.");
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Thread was interrupted!", e);
-        } finally {
-            semaphore.release();
         }
+        return new BookingResult(user, false, "No seats available.");
     }
 }
