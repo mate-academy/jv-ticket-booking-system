@@ -10,8 +10,8 @@ public class TicketBookingSystem {
     private int totalSeats;
 
     public TicketBookingSystem(int totalSeats) {
-        semaphore = new Semaphore(totalSeats);
         this.totalSeats = totalSeats;
+        semaphore = new Semaphore(totalSeats);
     }
 
     public BookingResult attemptBooking(String user) {
