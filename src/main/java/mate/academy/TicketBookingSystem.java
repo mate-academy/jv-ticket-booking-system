@@ -4,7 +4,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TicketBookingSystem {
-    private final Semaphore semaphore;
+    private Semaphore semaphore;
     private AtomicInteger numberOfSeats;
 
     public TicketBookingSystem(int totalSeats) {
