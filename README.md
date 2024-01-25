@@ -1,4 +1,4 @@
- # Online ticket booking system
+# Online ticket booking system
 
 Imagine you're developing an online ticket booking system for a cinema. The cinema has a limited number of seats available for each show. Our system must handle multiple booking requests simultaneously, ensuring that no more than the available seats are booked for any particular show. This is a classic case of a shared resource (cinema seats) being accessed by multiple entities (booking requests).
 
