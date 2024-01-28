@@ -3,28 +3,31 @@ package mate.academy;
 import java.util.concurrent.Semaphore;
 
 public class TicketBookingSystem {
-    private final Semaphore semaphore;
-    private Integer totalSeats;
+    private Semaphore semaphore;
+    private volatile Integer totalSeats;
 
     public TicketBookingSystem(int totalSeats) {
+
         this.semaphore = new Semaphore(totalSeats);
         this.totalSeats = totalSeats;
     }
 
     public BookingResult attemptBooking(String user) {
+        BookingResult result;
         try {
             semaphore.acquire();
-            if (totalSeats > 0) {
-                totalSeats--;
-                return new BookingResult(user, true, "Booking successful.");
-            } else {
-                return new BookingResult(user, false, "No seats available.");
+            synchronized (totalSeats) {
+                if (totalSeats > 0) {
+                    totalSeats--;
+                    result = new BookingResult(user, true, "Booking successful.");
+                } else {
+                    result = new BookingResult(user, false, "No seats available.");
+                }
             }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Thread was interrupted!", e);
-        } finally {
             semaphore.release();
+        } catch (InterruptedException e) {
+            result = new BookingResult(user, false, "Failed to enter site");
         }
+        return result;
     }
 }
