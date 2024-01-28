@@ -1,6 +1,5 @@
 package mate.academy;
 
-import java.util.concurrent.ForkJoinWorkerThread;
 import java.util.concurrent.Semaphore;
 
 public class TicketBookingSystem {
