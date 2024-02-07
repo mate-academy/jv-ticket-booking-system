@@ -1,3 +1,3 @@
 package mate.academy;
 
-public record BookingResult(String user, boolean success, String message) {}
+public record BookingResult(boolean success, String message, String user) {}
