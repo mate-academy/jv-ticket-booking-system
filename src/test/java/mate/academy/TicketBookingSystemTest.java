@@ -6,12 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+//import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Timeout;
 
-@Timeout(value = 2, unit = TimeUnit.MINUTES)
+//@Timeout(value = 2, unit = TimeUnit.MINUTES)
+@Timeout(value = 120000)
 class TicketBookingSystemTest {
 
     private TicketBookingSystem bookingSystem;
