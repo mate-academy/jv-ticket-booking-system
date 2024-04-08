@@ -13,15 +13,19 @@ public class TicketBookingSystem {
     }
 
     public BookingResult attemptBooking(String user) {
+        boolean acquired = availableSeats.tryAcquire();
         try {
-            if (availableSeats.tryAcquire()) {
+            if (acquired) {
+
                 
                 return new BookingResult(user, true, "Booking successful.");
             } else {
                 return new BookingResult(user, false, "No seats available.");
             }
         } finally {
+            if (acquired) {
 
+            }
         }
     }
 }
