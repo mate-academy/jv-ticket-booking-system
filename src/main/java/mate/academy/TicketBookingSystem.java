@@ -1,12 +1,27 @@
 package mate.academy;
 
+import java.util.concurrent.Semaphore;
+
 public class TicketBookingSystem {
 
-    public TicketBookingSystem(int totalSeats) {
+    private final Semaphore availableSeats;
+    private final int totalSeats;
 
+    public TicketBookingSystem(int totalSeats) {
+        this.totalSeats = totalSeats;
+        this.availableSeats = new Semaphore(totalSeats, true);
     }
 
     public BookingResult attemptBooking(String user) {
-        return null;
+        try {
+            if (availableSeats.tryAcquire()) {
+                
+                return new BookingResult(user, true, "Booking successful.");
+            } else {
+                return new BookingResult(user, false, "No seats available.");
+            }
+        } finally {
+
+        }
     }
 }
