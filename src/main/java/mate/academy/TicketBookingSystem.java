@@ -3,7 +3,7 @@ package mate.academy;
 import java.util.concurrent.Semaphore;
 
 public class TicketBookingSystem {
-    private Semaphore semaphore;
+    private final Semaphore semaphore;
 
     public TicketBookingSystem(int totalSeats) {
         semaphore = new Semaphore(totalSeats);
