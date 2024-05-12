@@ -1,25 +1,30 @@
 package mate.academy;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.*;
 
 public class TicketBookingSystem {
-    private int totalSeats;
+    private AtomicInteger totalSeats;
     private final Semaphore semaphore;
 
     public TicketBookingSystem(int totalSeats) {
-        this.totalSeats = totalSeats;
+        this.totalSeats = new AtomicInteger(totalSeats);
         this.semaphore = new Semaphore(totalSeats);
     }
 
     public BookingResult attemptBooking(String user) {
         try {
-            if (totalSeats <= 0) {
-                return new BookingResult(user, false, "No seats available.");
+            semaphore.acquire();
+
+            if (totalSeats.get() > 0) {
+                totalSeats.decrementAndGet();
+                return new BookingResult(user, true, "Booking successful.");
             }
 
-            semaphore.tryAcquire(totalSeats);
-            totalSeats--;
-            return new BookingResult(user, true, "Booking successful.");
+            return new BookingResult(user, false, "No seats available.");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
         } finally {
             semaphore.release();
         }
