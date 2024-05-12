@@ -18,7 +18,10 @@ public class TicketBookingSystem {
                 return new BookingResult(user, false, "No seats available.");
             }
 
-            semaphore.tryAcquire();
+            if (!semaphore.tryAcquire()) {
+                return new BookingResult(user, false, "No available permits for booking.");
+            }
+
             totalSeats.decrementAndGet();
             return new BookingResult(user, true, "Booking successful.");
         } finally {
