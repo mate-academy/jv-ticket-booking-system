@@ -1,7 +1,6 @@
 package mate.academy;
 
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.*;
 
 public class TicketBookingSystem {
     private int totalSeats;
