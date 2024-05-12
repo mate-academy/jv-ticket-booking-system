@@ -17,11 +17,9 @@ public class TicketBookingSystem {
                 return new BookingResult(user, false, "No seats available.");
             }
 
-            semaphore.acquire(totalSeats);
+            semaphore.tryAcquire(totalSeats);
             totalSeats--;
             return new BookingResult(user, true, "Booking successful.");
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         } finally {
             semaphore.release();
         }
