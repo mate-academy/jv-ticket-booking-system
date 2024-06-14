@@ -22,8 +22,9 @@ public class TicketBookingSystem {
                 return new BookingResult(user, false, "No seats available.");
             }
         } finally {
-            if (semaphore.availablePermits() > totalSeats)
+            if (semaphore.availablePermits() > totalSeats) {
                 semaphore.release();
+            }
         }
     }
 }
