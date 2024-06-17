@@ -3,10 +3,10 @@ package mate.academy;
 import java.util.concurrent.Semaphore;
 
 public class TicketBookingSystem {
-    private static final String SUCCESS_MSG = "Booking successfull";
-    private static final String NO_TICKETS_AVAILABLE_MSG = "No tickets available";
+    private static final String SUCCESS_MSG = "Booking successful.";
+    private static final String NO_TICKETS_AVAILABLE_MSG = "No seats available.";
     private final Semaphore semaphore;
-    
+
     public TicketBookingSystem(int totalSeats) {
         semaphore = new Semaphore(totalSeats);
     }
