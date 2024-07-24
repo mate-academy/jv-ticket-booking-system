@@ -31,7 +31,7 @@ public class TicketBookingSystem {
         }
     }
 
-    private boolean performBooking(String user) {
+    private synchronized boolean performBooking(String user) {
         if (totalSeats > 0) {
             totalSeats--;
             return true;
@@ -40,4 +40,3 @@ public class TicketBookingSystem {
         }
     }
 }
-
