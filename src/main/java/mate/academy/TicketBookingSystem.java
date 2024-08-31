@@ -15,6 +15,6 @@ public class TicketBookingSystem {
          if (semaphore.tryAcquire()) {
            return new BookingResult(user, true, "Booking successful.");
         }
-        return new BookingResult(user, false, "No seats available.");
+         return new BookingResult(user, false, "No seats available.");
     }
 }
