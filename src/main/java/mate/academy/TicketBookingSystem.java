@@ -12,7 +12,7 @@ public class TicketBookingSystem {
     }
 
     public BookingResult attemptBooking(String user) {
-        while (semaphore.tryAcquire()) {
+         while (semaphore.tryAcquire()) {
            return new BookingResult(user, true, "Booking successful.");
         }
         return new BookingResult(user, false, "No seats available.");
