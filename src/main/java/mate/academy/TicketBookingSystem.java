@@ -15,15 +15,17 @@ public class TicketBookingSystem {
     }
 
     public BookingResult attemptBooking(String user) {
-        if (seatsAvailable.get() == 0) {
-            return new BookingResult(user, false, "No seats available.");
-        }
-
         try {
             semaphore.acquire();
         } catch (Exception e) {
             Thread.currentThread().interrupt();
+
             return new BookingResult(user, false, "Booking failed");
+        }
+
+        if (seatsAvailable.get() == 0) {
+            semaphore.release();
+            return new BookingResult(user, false, "No seats available.");
         }
 
         BookingResult bookingResult = new BookingResult(user, true, "Booking successful.");
