@@ -11,8 +11,8 @@ public class TicketBookingSystem {
 
     public BookingResult attemptBooking(String user) {
         if (seatsTotal.tryAcquire()) {
-                return new BookingResult(user, true, "Booking successful.");
+            return new BookingResult(user, true, "Booking successful.");
         }
-            return new BookingResult(user, false, "Cannot booking");
+        return new BookingResult(user, false, "Cannot booking");
     }
 }
