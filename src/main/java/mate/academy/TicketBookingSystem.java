@@ -3,25 +3,22 @@ package mate.academy;
 import java.util.concurrent.Semaphore;
 
 public class TicketBookingSystem {
-    private Semaphore semaphore = new Semaphore(1);
-
+    private Semaphore semaphore;
     private int totalSeats;
 
     public TicketBookingSystem(int totalSeats) {
-        this.totalSeats = totalSeats;
+        this.semaphore = new Semaphore(totalSeats);
     }
 
     public BookingResult attemptBooking(String user) {
-        while (totalSeats > 0) {
-            try {
-                semaphore.acquire();
-                totalSeats = totalSeats - 1;
-                semaphore.release();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        try {
+            if (semaphore.tryAcquire()) {
+                return new BookingResult(user, true, "Booking successful.");
+            } else {
+                return new BookingResult(user, false, "No seats available.");
             }
-            return new BookingResult(user, true, "Booking successful.");
+        } catch (Exception e) {
+            throw new RuntimeException("Unexpected error during booking", e);
         }
-        return new BookingResult(user, false, "No seats available.");
     }
 }
