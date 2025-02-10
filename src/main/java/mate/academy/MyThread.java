@@ -5,7 +5,7 @@ import java.util.Random;
 public class MyThread implements Runnable {
     private static final Random random = new Random();
     private static final ThreadLocal<String> user = ThreadLocal
-            .withInitial(() -> "User" + random.nextInt(100));
+            .withInitial(() -> "User" + random.nextInt(1000));
 
     private final TicketBookingSystem bookingSystem;
 
