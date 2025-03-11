@@ -6,7 +6,6 @@ public class TicketBookingSystem {
     private final Semaphore semaphore;
     private int availableSeats;
 
-
     public TicketBookingSystem(int totalSeats) {
         this.availableSeats = totalSeats;
         this.semaphore = new Semaphore(totalSeats);
