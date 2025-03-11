@@ -4,23 +4,20 @@ import java.util.concurrent.Semaphore;
 
 public class TicketBookingSystem {
     private final Semaphore semaphore;
-    private int availableSeats;
 
     public TicketBookingSystem(int totalSeats) {
-        this.availableSeats = totalSeats;
-        this.semaphore = new Semaphore(totalSeats);
+        this.semaphore = new Semaphore(totalSeats, true);
     }
 
     public BookingResult attemptBooking(String user) {
-        if (semaphore.tryAcquire()) {
-            synchronized (this) {
-                if (availableSeats > 0) {
-                    availableSeats--;
-                    semaphore.release();
-                    return new BookingResult(user, true, "Available Seats: " + availableSeats);
-                }
+        try {
+            if (semaphore.tryAcquire()) {
+                return new BookingResult(user, true, "Booking successful.");
             }
+            return new BookingResult(user, false, "No seats available.");
+        } catch (Exception e) {
+            Thread.currentThread().interrupt();
+            return new BookingResult(user, false, "Booking was interrupted.");
         }
-        return new BookingResult(user, false, "Not enough seats");
     }
 }
