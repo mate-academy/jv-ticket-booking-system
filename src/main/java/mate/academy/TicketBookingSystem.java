@@ -19,3 +19,4 @@ public class TicketBookingSystem {
         return new BookingResult(user, false, "No seats available.");
     }
 }
+
