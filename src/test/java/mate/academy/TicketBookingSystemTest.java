@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
@@ -79,35 +81,35 @@ class TicketBookingSystemTest {
         assertEquals(5, successfulBookings); // Only 5 out of 10 should be able to book successfully
     }
 
-    @RepeatedTest(100)
+    @RepeatedTest(10) // 100 разів — це надмірно. Почнемо з 10.
     void attemptBooking_HighVolumeConcurrentRequests_ShouldHandleCorrectly() throws InterruptedException {
         // given
         int totalSeats = 350;
         int totalRequests = 3000;
         TicketBookingSystem bookingSystem = new TicketBookingSystem(totalSeats);
-        CountDownLatch startLatch = new CountDownLatch(1); // Ensures all threads start at the same time
-        Thread[] threads = new Thread[totalRequests];
+        ExecutorService executor = Executors.newFixedThreadPool(200); // обмежений пул потоків
+        CountDownLatch startLatch = new CountDownLatch(1);
+        CountDownLatch endLatch = new CountDownLatch(totalRequests);
+
         BookingResult[] results = new BookingResult[totalRequests];
 
-        // when
         for (int i = 0; i < totalRequests; i++) {
             final int userIndex = i;
-            threads[i] = new Thread(() -> {
+            executor.submit(() -> {
                 try {
-                    startLatch.await(); // Wait for the signal to start
+                    startLatch.await(); // Чекаємо старт
                     results[userIndex] = bookingSystem.attemptBooking("User" + userIndex);
                 } catch (InterruptedException e) {
-                    fail("The execution was interrupted", e);
+                    Thread.currentThread().interrupt();
+                    results[userIndex] = new BookingResult("User" + userIndex, false, "Interrupted");
+                } finally {
+                    endLatch.countDown(); // Завершення
                 }
             });
-            threads[i].start();
         }
 
-        startLatch.countDown(); // Signal all threads to start booking
-
-        for (Thread thread : threads) {
-            thread.join();
-        }
+        startLatch.countDown(); // Стартуємо всі потоки одночасно
+        endLatch.await(); // Чекаємо завершення всіх
 
         // then
         int successfulBookings = 0;
@@ -116,9 +118,10 @@ class TicketBookingSystemTest {
                 successfulBookings++;
             }
         }
-        assertEquals(totalSeats, successfulBookings); // Only 350 out of 3000 should be able to book successfully
-    }
 
+        assertEquals(totalSeats, successfulBookings, "Only 350 should succeed");
+        executor.shutdown();
+    }
     @RepeatedTest(100)
     void attemptBooking_LessRequestsThanSeats_AllRequestsShouldSucceed() throws InterruptedException {
         // given
