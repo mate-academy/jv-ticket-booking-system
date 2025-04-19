@@ -10,6 +10,7 @@ public class TicketBookingSystem {
         this.seatsSemaphore = new Semaphore(totalSeats);
     }
 
+
     public BookingResult attemptBooking(String user) {
         try {
             // Очікує до 1 секунди, щоб забронювати квиток
