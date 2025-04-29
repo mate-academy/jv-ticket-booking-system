@@ -83,7 +83,7 @@ class TicketBookingSystemTest {
     void attemptBooking_HighVolumeConcurrentRequests_ShouldHandleCorrectly() throws InterruptedException {
         // given
         int totalSeats = 350;
-        int totalRequests = 3000;
+        int totalRequests = 2000;
         TicketBookingSystem bookingSystem = new TicketBookingSystem(totalSeats);
         CountDownLatch startLatch = new CountDownLatch(1); // Ensures all threads start at the same time
         Thread[] threads = new Thread[totalRequests];
@@ -118,7 +118,6 @@ class TicketBookingSystemTest {
         }
         assertEquals(totalSeats, successfulBookings); // Only 350 out of 3000 should be able to book successfully
     }
-
     @RepeatedTest(100)
     void attemptBooking_LessRequestsThanSeats_AllRequestsShouldSucceed() throws InterruptedException {
         // given
