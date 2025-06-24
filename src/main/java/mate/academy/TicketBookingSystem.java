@@ -14,7 +14,7 @@ public class TicketBookingSystem {
         if (acquired) {
             return new BookingResult(user, true, "Booking successful.");
         } else {
-            return new BookingResult(user, false, "Booking failed.");
+            return new BookingResult(user, false, "No seats available.");
         }
     }
 }
