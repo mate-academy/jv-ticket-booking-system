@@ -9,17 +9,17 @@ public class TicketBookingSystem {
         this.semaphore = new Semaphore(totalSeats);
     }
 
-    public BookingResult attemptBooking(String user) {
-        try {
-            if (semaphore.availablePermits() > 0) {
+    public synchronized BookingResult attemptBooking(String user) {
+        if (semaphore.availablePermits() > 0) {
+            try {
                 semaphore.acquire();
                 return new BookingResult(user, true, "Booking successful.");
-            } else {
-                return new BookingResult(user, false, "No seats available.");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return new BookingResult(user, false, "Error: " + e.getMessage());
             }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return new BookingResult(user, false, "System error: " + e.getMessage());
+        } else {
+            return new BookingResult(user, false, "No seats available.");
         }
     }
 }
