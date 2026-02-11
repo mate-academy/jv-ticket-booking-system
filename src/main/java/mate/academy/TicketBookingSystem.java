@@ -11,6 +11,7 @@ public class TicketBookingSystem {
 
     public BookingResult attemptBooking(String user) {
         boolean success = semaphore.tryAcquire();
-        return new BookingResult(user, success, success ? "Booking successful." : "No seats available.");
+        return new BookingResult(user, success, success ? "Booking successful."
+                : "No seats available.");
     }
 }
