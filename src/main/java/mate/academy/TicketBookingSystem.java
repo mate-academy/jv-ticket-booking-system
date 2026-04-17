@@ -2,7 +2,7 @@ package mate.academy;
 
 import java.util.concurrent.Semaphore;
 
-public class TicketBookingSystem extends Thread {
+public class TicketBookingSystem {
     private final Semaphore seatsSemaphore;
 
     public TicketBookingSystem(int totalSeats) {
