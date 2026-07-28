@@ -11,9 +11,9 @@ public class TicketBookingSystem {
 
     public BookingResult attemptBooking(String user) {
         if (seatSemaphore.tryAcquire()) {
-            return new BookingResult(user, true, "Booking successful");
+            return new BookingResult(user, true, "Booking successful.");
         } else {
-            return new BookingResult(user, false, "Booking failed, no seats available");
+            return new BookingResult(user, false, "No seats available.");
         }
     }
 }
